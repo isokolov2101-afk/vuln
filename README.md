@@ -28,9 +28,9 @@
 ![nmap scan](https://github.com/isokolov2101-afk/vuln/blob/main/nmap%20scan.jpg)
 
 - Какие уязвимости были вами обнаружены? (список со ссылками: достаточно трёх уязвимостей)
-1. [vsftpd 2.3.4]!(https://www.exploit-db.com/exploits/17491)
-2. [ProFTPD 1.3.1]!(https://www.exploit-db.com/exploits/8037)
-3. [Samba 3.x]!(https://www.exploit-db.com/exploits/16320)
+1. vsftpd 2.3.4 (https://www.exploit-db.com/exploits/17491)
+2. ProFTPD 1.3.1(https://www.exploit-db.com/exploits/8037)
+3. Samba 3.x (https://www.exploit-db.com/exploits/16320)
 
 
 ### Задание 2
@@ -45,3 +45,22 @@
 - Как отвечает сервер?
 
 *Приведите ответ в свободной форме.*
+
+### Решение 2
+
+Выполним сканирование по 22 порту. 
+
+1. SYN-сканирование (порт 22/tcp открыт):
+Поскольку служба SSH запущена и слушает 22-й порт, сервер отвечает пакетом [SYN, ACK] (подтверждение готовности установить соединение).
+Получив этот ответ, nmap сразу определяет состояние порта как open и обрывает соединение, отправляя пакет [RST] (вместо завершения рукопожатия пакетом ACK).
+![1](https://github.com/isokolov2101-afk/vuln/blob/main/22-SYN.jpg)
+
+2. FIN- и Xmas-сканирование (порт 22/tcp открыт):
+В Wireshark видно, что сервер никак не отвечает (ответные пакеты от 10.0.66.3 отсутствуют). Из-за отсутствия ответа и невозможности отличить открытый порт от отфильтрованного межсетевым экраном nmap присваивает порту статус open|filtered
+![2](https://github.com/isokolov2101-afk/vuln/blob/main/22-FIN.jpg)
+![3](https://github.com/isokolov2101-afk/vuln/blob/main/22-Xmas.jpg)
+
+3. UDP-сканирование (порт 22/udp закрыт):
+Служба SSH работает только по протоколу TCP, поэтому порт 22/udp закрыт.
+В ответ на UDP-пакет сервер отправляет служебное сообщение протокола ICMP типа 3, код 3 — Destination unreachable (Port unreachable) (на третьем скриншоте подсвечено зелёной строкой в Wireshark). Получив это сообщение, nmap однозначно определяет состояние порта как closed.
+![4](https://github.com/isokolov2101-afk/vuln/blob/main/22-UPD.jpg)
