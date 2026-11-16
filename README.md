@@ -22,6 +22,17 @@
   
 *Приведите ответ в свободной форме.*  
 
+### Решение 1
+
+- Какие сетевые службы в ней разрешены?
+![nmap scan](https://github.com/isokolov2101-afk/vuln/blob/main/nmap%20scan.jpg)
+
+- Какие уязвимости были вами обнаружены? (список со ссылками: достаточно трёх уязвимостей)
+1. [vsftpd 2.3.4]!(https://www.exploit-db.com/exploits/17491)
+2. [ProFTPD 1.3.1]!(https://www.exploit-db.com/exploits/8037)
+3. [Samba 3.x]!(https://www.exploit-db.com/exploits/16320)
+
+
 ### Задание 2
 
 Проведите сканирование Metasploitable в режимах SYN, FIN, Xmas, UDP.
